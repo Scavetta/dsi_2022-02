@@ -13,6 +13,10 @@ library(tidyverse)
 # Basic R syntax ----
 # What does this command do?
 n <- log2(8) # 2^n = 8
+# n = log(8)
+# log2(8) -> n
+
+# LHS <- RHS
 
 # Exercise 1 ----
 # Can you identify all the parts of the above commands?
@@ -25,8 +29,28 @@ n <- log2(8) # 2^n = 8
 # Plant Growth Case Study ----
 
 # A built-in data set ----
-read.csv("00-data/plantgrowth.csv")
-read_csv("00-data/plantgrowth.csv")
+# getwd()
+# Result: 
+# 1 - print to screen (console), or
+# 2 - assign to an object, or
+# 3 - print/write to a file
+
+pg_df <- read.csv("../00-data/plantgrowth.csv")
+pg_tb <- read_csv("../00-data/plantgrowth.csv")
+
+# print to the screen
+# Call the name of an object -> print(obj)
+pg_df # print(pg_df)
+class(pg_df)
+
+pg_tb
+class(pg_tb)
+
+
+# We read data directly from a URL:
+# "https://raw.githubusercontent.com/reisanar/datasets/master/WestRoxbury.csv"
+# rox <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/WestRoxbury.csv")
+
 
 PlantGrowth # already available in base R
 data(PlantGrowth) # This will make it appear in your environment
@@ -43,9 +67,11 @@ PlantGrowth <- as_tibble(PlantGrowth) # convert this to a "tibble" (more on this
 # The "global mean" of all the weight values
 # 3 things: func, dataframe, column
 mean(PlantGrowth$weight)
+
 # DO NOT do this:
 # attach(PlantGrowth)
 # weight
+# mean(weight)
 # detach(PlantGrowth)
 # weight
 
@@ -59,14 +85,21 @@ mean(PlantGrowth$group)
 # Pronounce it as "... and then ..."
 # Type it using shift + ctrl + m
 
+# The pipe operators
+# %>%  from the magrittr
+# |> native pipe operator
+
 # Use summarise() for aggregation functions
 PlantGrowth %>% 
   group_by(group) %>% 
-  summarise(avg = mean(PlantGrowth$weight),
+  summarise(avg = mean(weight),
+            avg_ = mean(PlantGrowth$weight),
             stdev = sd(weight),
             min = min(weight),
             max = max(weight),
             range = diff(range(weight)))
+
+# diff(range(PlantGrowth$weight))
 # range: max - min
 # diff(range(1:10))
 # diff(c(5, 20))
@@ -90,20 +123,34 @@ PlantGrowth %>%
 
 # Or... an atypical example, but it can still be useful:
 # The apply family of functions
-lapply(PlantGrowth, mean)
+lapply(rox, mean)
 # How to do the grouping with the apply functions.
-t_values <- tapply(PlantGrowth$weight, PlantGrowth$group, mean)
-typeof(t_values)
-attributes(t_values)
-dimnames(t_values)
-str(t_values)
-t_values$ctrl # can't call using $ syntax
-t_values[1]*1000
+tapply(PlantGrowth$weight, PlantGrowth$group, mean)
+# t_values <- 
+# typeof(t_values)
+# attributes(t_values)
+# dimnames(t_values)
+# str(t_values)
+# t_values$ctrl # can't call using $ syntax
+# t_values[1]*1000
 
 # What about using mutate() with an aggregration function?
 PlantGrowth %>% 
   group_by(group) %>% 
   mutate(avg = mean(weight))
+
+PlantGrowth_gr <- PlantGrowth %>% 
+  group_by(group)
+
+# PlantGrowth %>% 
+#   group_split() -> PlantGrowth_split
+
+class(PlantGrowth)
+attributes(PlantGrowth)
+
+class(PlantGrowth_gr)
+attributes(PlantGrowth_gr)
+
 
 # For transformation functions: e.g. z-score within each group
 # (x_i - x_bar)/x_sd (Signal-to-noise)
@@ -157,9 +204,28 @@ PlantGrowth$weight %>%
 # 3 - Geometry - how the plot will look
 
 # box plot -  display distribution in the form of quartiles
-ggplot(PlantGrowth, aes(group, weight)) +
+ggplot(PlantGrowth, aes(x = group, y = weight)) +
   geom_boxplot()
- 
+
+g <- ggplot(PlantGrowth, aes(x = group, y = weight))
+
+# g_1 <- g +
+#   geom_boxplot()
+
+# histogram
+# x = group
+# y = 
+
+# x = 
+# y = weight
+
+# x = weight
+# y = frequency  (from the geom_)
+# what about weight? ignore or map onto another aesthetic: 
+ggplot(PlantGrowth, aes(x = weight)) + 
+  geom_histogram()
+
+
 # Assign some (1 or more) layers to an object when
 # you need to reuse it:
 p <- ggplot(PlantGrowth, aes(group, weight))
