@@ -3,6 +3,9 @@
 
 # Try to begin your R scripts with a descriptive header
 
+# Clear the env
+rm(list = ls())
+
 # Load packages ----
 # Install once, but initialize each time you start a new session
 # We'll come back to this packages soon later on. I put this 
@@ -49,7 +52,7 @@ class(pg_tb)
 
 # We read data directly from a URL:
 # "https://raw.githubusercontent.com/reisanar/datasets/master/WestRoxbury.csv"
-# rox <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/WestRoxbury.csv")
+rox <- read_csv("https://raw.githubusercontent.com/reisanar/datasets/master/WestRoxbury.csv")
 
 
 PlantGrowth # already available in base R
@@ -126,6 +129,7 @@ PlantGrowth %>%
 lapply(rox, mean)
 # How to do the grouping with the apply functions.
 tapply(PlantGrowth$weight, PlantGrowth$group, mean)
+
 # t_values <- 
 # typeof(t_values)
 # attributes(t_values)
@@ -222,9 +226,18 @@ g <- ggplot(PlantGrowth, aes(x = group, y = weight))
 # x = weight
 # y = frequency  (from the geom_)
 # what about weight? ignore or map onto another aesthetic: 
-ggplot(PlantGrowth, aes(x = weight)) + 
+ggplot(PlantGrowth, aes(x = weight, fill = group)) + 
   geom_histogram()
+  
+# To get three "sub" plots, 1 for each trt1, trt2 and ctrl:
+# - Copy & paste and filter the data set each time for that group
+# - for loop and in each cycle take a new group value
+# - Map functions to automatically apply each value to the plotting function 
+# - case-specific functions for not repeating but ... splitting (facets) or grouping
 
+ggplot(PlantGrowth, aes(x = weight)) + 
+  geom_histogram() +
+  facet_grid(rows = vars(group))
 
 # Assign some (1 or more) layers to an object when
 # you need to reuse it:
@@ -256,7 +269,7 @@ p +
 # We can combine layers in many ways:
 p +
   geom_boxplot() +
-  geom_jitter(width = 0.2, shape = 16, alpha = 0.75, color = "pink")
+  geom_jitter(width = 0.2, shape = 16, alpha = 0.85, color = "pink")
 
 # 3. Inferential Statistics ----
 # first step: define a linear model
@@ -265,12 +278,15 @@ Plant.lm <- lm(weight ~ group, data = PlantGrowth)
 
 # It's not necessary, but we could have used 
 # "tidyverse" notation if we wanted to:
+# LHS %>% RHS
+# LHS = DataFrame
+# RHS = Function where the first position is a DataFrame
+
 PlantGrowth %>% 
   lm(weight ~ group, data = .)
 
 # 1-way ANOVA
 Plant.anova <- anova(Plant.lm)
-
 
 summary(Plant.lm)
 summary(PlantGrowth)
