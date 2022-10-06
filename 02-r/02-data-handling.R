@@ -33,6 +33,7 @@ n + p
 # Which ones work and which one will produce an error?
 log(x = 8, base = 2) # long form, named
 log(8, 2) # long form, position
+log(8, base = 2)
 log(8, base = 10/5) # long form, combo
 log(base = 2, 8) # bad style
 log(8, b = 2) # long form, combo using partial naming
@@ -127,7 +128,27 @@ sum(c(3,7,1))
 # subtract background
 # +, -, /, ...
 # 1 input (operator) -> 1 transformed output
-34 + 6
+34 + 6 # transformation
+c(36, 40, 42) + 6
+
+sum(34, 6) # aggregration function
+
+# Revisit the PlantGrowth 
+# For aggregrations
+library(dplyr)
+PlantGrowth %>% 
+  group_by(group) %>% 
+  summarise(x10 = weight * 10, # Removes original weight values
+            avg = mean(weight))
+
+# For transformations but using an agg math fun
+PlantGrowth %>% 
+  group_by(group) %>% 
+  mutate(x10 = weight * 10,
+         avg = mean(weight))
+
+
+
 
 # Exercise: Are these transformation or aggregation?
 # Don't execute the commands, try to guess what the output will be!
@@ -167,17 +188,19 @@ sum(foo2) + foo2
 
 # Part 2: Objects (nouns) ----
 # Anything that exists is an object
+# Vectors, Lists, DataFrames
 
-# Vectors - 1-dimensional, homogenous ----
+
+# Vectors - 1-dimensional, homogeneous ----
 # Everything in the values section
 foo1
 myNames
-
+# The 4 most common
 # "user-defined atomic vector types" ----
 # What do you the 4 most common ones are used to represent? 
 # Logical - TRUE/FALSE, T/F, 1/0 (Boolean)
 # Integer - whole numbers
-# Double - real numbers (float) (<dbl> in tidy)
+# Double - real numbers (float) (<dbl> in tidy, float64)
 # Character - All values (string)
 
 # Numeric - Generic class refer to int or dbl
@@ -276,6 +299,7 @@ summary(PlantGrowth) # summarise each column in a "dataframe"
 
 # Dataframes - 2-dimensional, heterogenous ----
 class(PlantGrowth)
+class(plant_lm)
 # A special class of type list...
 typeof(PlantGrowth)
 

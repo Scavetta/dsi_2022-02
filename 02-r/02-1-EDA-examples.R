@@ -4,18 +4,48 @@
 library(ggplot2)
 library(DataExplorer)
 library(GGally)
+# library(tibble)
 
 # Decide on an easy dataset 
 PlantGrowth
-glimpse(diamonds)
-# glimpse(starwars)
+tibble::glimpse(diamonds)
+??glimpse
+data("diamonds")
+
+glimpse(starwars)
+
 
 # Make an EDA report:
 create_report(diamonds, 
-              output_file = "diamonds_EDA.html", 
-              output_dir = "02-r/EDA_reports/")
+              output_file = "diamonds_EDA_r2.html", 
+              output_dir = "EDA_reports/")
+
+# As an aside:
+# Continuous variables, AKA
+## Quantitative
+
+# Categorical variables, AKA
+## with categories, group, class, label
+## Qualitative
+## Discrete
+## Factors (with Levels)
+
+# Sub-categories of categorical
+# Binary, Nominal, Ordinal
 
 # GGally pairs plot
+# SPLOM - Scatter plot matrix (x cont, y cont)
 g <- ggpairs(diamonds)
-ggsave(g, filename = "02-r/EDA_reports/diamonds_pairs.png", width = 10, height = 10, units = "in")
-ggsave(g, filename = "02-r/EDA_reports/diamonds_pairs_largeview.png", width = 20, height = 20, units = "in")
+
+# Raster files (png, jpeg, gif, tiff, wmf, bmp) dpi for screen 72, print 300
+ggsave(g, filename = "EDA_reports/diamonds_pairs.png", width = 10, height = 10, units = "in")
+ggsave(g, filename = "EDA_reports/diamonds_pairs_largeview.png", width = 20, height = 20, units = "in")
+
+# Vector (svg, pdf, .il, eps, ps)
+
+# png("myPlot.png")
+# 
+# # ploting commands
+# 
+# dev.off()
+

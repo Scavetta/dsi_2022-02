@@ -236,6 +236,14 @@ ggplot(dia_range_1_col_ID, aes(cut, range, color = color)) +
 - What is the average diamond price in each category of cut and color?
 
 ```{r}
+table(diamonds$cut, diamonds$color)
+
+# 35 combinations of cut and color
+diamonds %>% 
+  group_by(cut, color) %>% 
+  summarise(avg = mean(price),
+            stdev = sd(price),
+            n = n()) -> dia_cut_color
 
 ```
 
@@ -243,13 +251,78 @@ ggplot(dia_range_1_col_ID, aes(cut, range, color = color)) +
 
 ```{r}
 
+# dia_cut_color
+# cut   color   avg   ... stdev
+# Aesthetics (scale, axis):
+# x-axis, y-axis, color-axis, size-axis, fill-axis, linetype-axis, alpha-axis, shape-axis 
+
+# n is mapped onto the Size aes
+ggplot(dia_cut_color, aes(x = cut, y = color, size = n)) +
+  geom_point()
+
+# avg price is mapped onto y
+# Add stdev to geom_pointrange
+ggplot(dia_cut_color, aes(x = cut, y = avg, color = color)) +
+  geom_pointrange(aes(ymin = avg - stdev, ymax = avg + stdev)) +
+  geom_point() +
+  facet_grid(rows = vars(color))
+
 ```
 
 - Are boxplots useful when representing this data?
 
 ```{r}
+# Here using the average for each of the 35 groups (cut + color)
+# NOT appropriate
+ggplot(dia_cut_color, aes(x = cut, y = avg, color = color)) +
+  geom_boxplot()
+# the dist of the avg prices --- not useful or appropriate
+ggplot(dia_cut_color, aes(x = cut, y = avg)) +
+  geom_boxplot()
+
+# Here, using the raw data would be better
+# but... we need to transform it
+ggplot(diamonds, aes(x = cut, y = log(price), color = color)) +
+  geom_boxplot()
+
 
 ```
+
+```{r}
+# Just taking the Ideal cut and E color:
+example <- diamonds$price[diamonds$cut == "Ideal" & diamonds$color == "E"]
+
+comparisons <- tibble(raw = example)
+
+comparisons %>% 
+  mutate(log_e = log(raw),
+         z_score = scale(raw)[,1]) -> comparisons
+
+ggplot(comparisons, aes(raw)) +
+  geom_density()
+
+ggplot(comparisons, aes(log_e)) +
+  geom_density()
+
+# The distribution has the same shape as the raw data, but 
+# is rescaled using the z_score
+ggplot(comparisons, aes(z_score)) +
+  geom_density() 
+
+# I would rather make the data tidy and do one plotting function:
+# Tidy data would look like: 2 variables: scale and value
+
+comparisons %>% 
+  pivot_longer(everything()) -> comp_t
+
+ggplot(comp_t, aes(value, color = name)) +
+  geom_density() +
+  facet_wrap(facets = vars(name), scales = "free")
+
+
+```
+
+
 
 ## Exercise 9.8 (Plotting)
 

@@ -102,6 +102,9 @@ PlantGrowth %>%
             max = max(weight),
             range = diff(range(weight)))
 
+
+
+
 # diff(range(PlantGrowth$weight))
 # range: max - min
 # diff(range(1:10))
@@ -161,13 +164,16 @@ attributes(PlantGrowth_gr)
 # function: scale()
 # typical use mutate()
 PlantGrowth %>% 
-  group_by(group) %>% 
+  group_by(group) %>%
   # group_split()
-  mutate(Z_score = scale(weight),
-         # avg = mean(weight),                          # We can use an aggregation function
-         Z_score_dollar = scale(PlantGrowth$weight),  # But not a transformation that is longer than what is expected
-         x10 = weight * 10) %>%
-  slice(1:3)
+  mutate(Z_score = scale(weight)[,1]) -> PlantGrowth_z_score
+PlantGrowth_z_score
+         # ,
+         # # avg = mean(weight),                          # We can use an aggregation function
+         # Z_score_dollar = scale(PlantGrowth$weight),  # But not a transformation that is longer than what is expected
+         # x10 = weight * 10
+# %>%
+#   slice(1:3)
 
 # But this will still work even though summarise is 
 # supposed to be used for aggregation functions.
@@ -180,7 +186,7 @@ PlantGrowth %>%
 # (no grouping)
 # Base R way:
 # PlantGrowth$weight <- PlantGrowth$weight * 10
-scale(PlantGrowth$weight)
+scale(PlantGrowth$weight)[,1]
 
 
 
@@ -234,10 +240,18 @@ ggplot(PlantGrowth, aes(x = weight, fill = group)) +
 # - for loop and in each cycle take a new group value
 # - Map functions to automatically apply each value to the plotting function 
 # - case-specific functions for not repeating but ... splitting (facets) or grouping
+PlantGrowth %>% 
+  ggplot(aes(x = weight)) + 
+    geom_histogram() +
+    facet_grid(rows = vars(group)) +
+  labs(title = "raw values")
 
-ggplot(PlantGrowth, aes(x = weight)) + 
-  geom_histogram() +
-  facet_grid(rows = vars(group))
+# What about the z-scores:
+PlantGrowth_z_score %>% 
+  ggplot(aes(x = Z_score)) + 
+    geom_histogram() +
+    facet_grid(rows = vars(group)) +
+  labs(title = "z-score")
 
 # Assign some (1 or more) layers to an object when
 # you need to reuse it:
