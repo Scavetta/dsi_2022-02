@@ -49,7 +49,7 @@ iris %>%
 
 # Another example ----
 # Get a play data set:
-PlayData <- read_tsv("00-data/PlayData.txt")
+PlayData <- read_tsv("../00-data/PlayData.txt")
 
 # Exercises on messy data ----
 # Part 1 - Calculate height/width for each group:
