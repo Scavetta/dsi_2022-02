@@ -1,0 +1,9 @@
+```{r test_child_1}
+1+1
+dnorm(0)
+```
+
+```{r test_child_2}
+2+2
+dnorm(0)
+```

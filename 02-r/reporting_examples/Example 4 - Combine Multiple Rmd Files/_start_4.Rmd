@@ -1,0 +1,31 @@
+---
+title: "Example 4"
+output: html_document
+date: "2022-10-12"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Access "chunks" in an external script, which are marked by 
+
+```
+## ---- chunk-label
+```
+
+where `chunk-label` is the uniquw chunk label, by using `read_chunk('test.R')`.
+
+```{r, include=FALSE, cache=FALSE}
+knitr::read_chunk('test.R')
+```
+
+Now we can use the code:
+
+```{r, test-a, echo=FALSE}
+```
+
+```{r, test-b, fig.height=4}
+```

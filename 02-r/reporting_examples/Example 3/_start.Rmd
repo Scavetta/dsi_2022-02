@@ -1,0 +1,45 @@
+---
+title: "Example 3"
+output: html_document
+date: "2022-10-12"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This imports all the names of chunks in an external R Markdown document.
+The are available as output `"temp"` in this documents environment.
+
+```{r eval = TRUE, echo=FALSE}
+
+invisible(knitr::purl("child.Rmd", output="temp", quiet=TRUE))
+
+knitr::read_chunk("temp")
+
+```
+
+This is an internal _named_ R chunk:
+
+```{r hello}
+5 + 5
+```
+
+Use `ref.label` to include a chunk.
+This is all of `test_child_2` from `"temp"`,
+
+```{r eval = TRUE, ref.label='test_child_2'}
+```
+
+This unlinks the imported names:
+
+```{r eval = TRUE, echo=FALSE}
+unlink("temp")
+```
+
+And this an internal _named_ R chunk, from above, reproduced by calling it by name
+
+```{r ref.label='hello'}
+```

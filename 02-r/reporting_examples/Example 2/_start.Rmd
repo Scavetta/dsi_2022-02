@@ -1,0 +1,23 @@
+---
+title: "Parent"
+output: html_document
+date: "2022-10-12"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+These are external child R Markdown documents, each contains one R chunk:
+
+```{r, child=c('one.Rmd', 'two.Rmd')}
+```
+
+This is an internal R chunk:
+
+```{r}
+3 + 3
+```
+
