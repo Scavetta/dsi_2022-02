@@ -1,12 +1,16 @@
 07-dl/python/data/
 00-data/nyc_mini/nyc mini
 individual-assignment-2*
+./individual-asignment-2-scavetta
+typings
 
 #macOS
 .DS_Store
 
 # containers
 .devcontainer
+.venv
+.vscode
 
 # Personal folder
 personal
