@@ -3,6 +3,8 @@
 individual-assignment-2*
 ./individual-asignment-2-scavetta
 typings
+kaggle
+.ipynb_*
 
 #macOS
 .DS_Store
